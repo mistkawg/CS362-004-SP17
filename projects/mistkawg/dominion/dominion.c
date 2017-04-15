@@ -668,7 +668,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return playCouncil_Room(state, currentPlayer, handPos);
 
     case feast:
-        return playFeast(state, currentPlayer, choice1);
+        return playFeast(state, currentPlayer, choice1, handPos);
 
     case gardens:
       return -1;
@@ -1291,7 +1291,7 @@ int playVillage(struct gameState *state, int currentPlayer, int handPos) {
 }
 
 //gain card with cost up to 5
-int playFeast(struct gameState *state, int currentPlayer, int choice1) {
+int playFeast(struct gameState *state, int currentPlayer, int choice1, int handPos) {
     int backupHand[MAX_HAND];
     int i;
     //Backup hand
@@ -1331,6 +1331,9 @@ int playFeast(struct gameState *state, int currentPlayer, int choice1) {
         state->hand[currentPlayer][i] = backupHand[i];
         backupHand[i] = -1;
     }
+
+    //put played feast card in played card pile
+    discardCard(handPos, currentPlayer, state, 0);
 
     return 0;
 }
