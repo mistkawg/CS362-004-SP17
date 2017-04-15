@@ -808,15 +808,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+        playSmithy(state, currentPlayer, handPos);
 
     case village:
       //+1 Card
@@ -1340,11 +1332,25 @@ int playAdventurer(struct gameState *state, int currentPlayer) {
     //discard revealed non-treasures
     while((i-1) >= 0){
         // discard all cards in play that have been drawn
-        state->discard[currentPlayer][state->discardCount[currentPlayer]++] = revealed[i-1]; //bug here, should be [i]
+        state->discard[currentPlayer][state->discardCount[currentPlayer]++] = revealed[i];
         i--;
     }
 
+    //bug here! The adventurer card is never discarded
+    //perhaps return treasureCount - 2, to make sure 2 treasures are drawn?
     return 0;
 }
 
+//bug in function call, handPos and currentPlayer are reversed
+int playSmithy(struct gameState *state, int handPos, int currentPlayer) {
+    //draw 3 Cards
+    int i;
+    for (i = 0; i < 3; i++) {
+        drawCard(currentPlayer, state);
+    }
+
+    //discard used smithy card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+    return 0;
+}
 //end of dominion.c
